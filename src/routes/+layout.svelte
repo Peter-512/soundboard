@@ -1,5 +1,10 @@
 <script>
-	import '../app.css';
+  import "../app.css";
+  import { setupViewTransition } from "sveltekit-view-transition";
+
+  setupViewTransition();
 </script>
 
-<slot />
+<main class="m-5">
+  <slot />
+</main>
