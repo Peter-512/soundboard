@@ -1,14 +1,16 @@
 import { z } from 'zod';
 
 export const soundBoardItemSchema = z.object({
-	id: z.number().gt(0),
 	imgSrc: z.string().url(),
 	soundSrc: z.string().url(),
 	alt: z.string().nonempty(),
-	name: z.string().nonempty()
+	name: z.string().min(5),
+	category: z.enum(['dragons', 'werewolves'])
 });
 
-export type SoundBoardItem = z.infer<typeof soundBoardItemSchema>;
+export type SoundBoardItemSchema = typeof soundBoardItemSchema;
+
+export type SoundBoardItem = Omit<z.infer<SoundBoardItemSchema>, 'category'> & { id: number };
 
 export interface Category {
 	name: string;

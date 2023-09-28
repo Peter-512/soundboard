@@ -1,12 +1,15 @@
 <script lang="ts">
+  import * as Sheet from "$lib/components/ui/sheet";
   import { activeId, isPlaying } from "$lib/stores/isPlaying";
   import { fly } from "svelte/transition";
   import { settings } from "$lib/stores/settings";
   import SoundBoardItem from "$lib/ui/SoundBoardItem.svelte";
   import Category from "$lib/ui/Category.svelte";
+  import SoundBoardForm from "./SoundBoardForm.svelte";
+  import { PlusCircled } from "radix-icons-svelte";
 
   export let data;
-  const { items, category } = data;
+  const { items, category, form } = data;
 
 </script>
 
@@ -26,4 +29,16 @@
   </section>
 {/if}
 
-
+<Sheet.Root>
+  <Sheet.Trigger class="absolute bottom-5 right-5">
+    <PlusCircled size={45} />
+  </Sheet.Trigger>
+  <Sheet.Content>
+    <Sheet.Header class="mb-8">
+      <Sheet.Title>Add new mythical creatures</Sheet.Title>
+      <Sheet.Description>Unleash Your Imagination: Enrich Our Mythical Realm with New and Wondrous Creatures
+      </Sheet.Description>
+    </Sheet.Header>
+    <SoundBoardForm {form} />
+  </Sheet.Content>
+</Sheet.Root>
