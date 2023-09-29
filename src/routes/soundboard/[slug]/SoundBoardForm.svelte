@@ -2,18 +2,26 @@
   import * as Form from "$lib/components/ui/form";
   import { type SoundBoardItemSchema, soundBoardItemSchema } from "$lib/types";
   import type { SuperValidated } from "sveltekit-superforms";
-  // import { superForm } from "sveltekit-superforms/dist/client";
+  import { soundBoardItems } from "$lib/stores/soundBoardItems";
+
   export let form: SuperValidated<SoundBoardItemSchema>;
 
   enum Categories {
     dragons = "Dragons",
     werewolves = "Werewolves"
   }
-
-  // const { enhance } = superForm(form);
 </script>
 
-<Form.Root options={{ resetForm: true }}
+<Form.Root options={{ resetForm: true, onResult(input) {
+  if (input.result.type === 'failure') return;
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const {category, ...soundBoardItem} = input.result.data.form.data;
+  const newId =$soundBoardItems[$soundBoardItems.length - 1].id + 1
+
+  $soundBoardItems = [...$soundBoardItems, {...soundBoardItem, id: newId}]
+  }
+}}
            class="flex flex-col gap-4"
            method="POST" {form}
            schema={soundBoardItemSchema}

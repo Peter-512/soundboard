@@ -11,7 +11,7 @@
 
 <svelte:element href={asLink ? `soundboard/${name}` : undefined} this={asLink ? 'a' : 'div'}
                 use:transition={`image-${name}`}
-                class={`${size === 'lg' ? 'h-96 w-96' : 'h-36 w-36'} m-auto`}>
+                class={`${size === 'lg' ? 'h-96 w-96' : 'h-36 w-36'} m-auto block`}>
   <div class="overflow-hidden rounded-lg">
     <img
       class={`${size === 'lg' ? 'h-96 w-96' : 'h-36 w-36'} ${asLink && 'transition-all duration-300 rounded-lg hover:scale-110'} object-cover rounded-lg`}

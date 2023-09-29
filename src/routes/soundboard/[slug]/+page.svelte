@@ -7,16 +7,18 @@
   import Category from "$lib/ui/Category.svelte";
   import SoundBoardForm from "./SoundBoardForm.svelte";
   import { PlusCircled } from "radix-icons-svelte";
+  import { soundBoardItems } from "$lib/stores/soundBoardItems";
 
   export let data;
   const { items, category, form } = data;
 
+  $: $soundBoardItems = [...items];
 </script>
 
 <Category {...category} size={'lg'}></Category>
 
 <section class="flex gap-5 flex-wrap my-5 justify-center">
-  {#each items as item}
+  {#each $soundBoardItems as item}
     <SoundBoardItem {...item} />
   {/each}
 </section>
@@ -24,16 +26,16 @@
 {#if $isPlaying && $settings.altTextDisplayed}
   <section transition:fly={{y: 50}} class="flex justify-center">
     <blockquote class="mt-6 border-l-2 pl-6 italic">
-      {items.find((item) => item.id === $activeId)?.alt}
+      {$soundBoardItems.find((item) => item.id === $activeId)?.alt}
     </blockquote>
   </section>
 {/if}
 
 <Sheet.Root>
-  <Sheet.Trigger class="absolute bottom-5 right-5">
+  <Sheet.Trigger class="fixed bottom-5 right-5">
     <PlusCircled size={45} />
   </Sheet.Trigger>
-  <Sheet.Content>
+  <Sheet.Content class="overflow-y-auto">
     <Sheet.Header class="mb-8">
       <Sheet.Title>Add new mythical creatures</Sheet.Title>
       <Sheet.Description>Unleash Your Imagination: Enrich Our Mythical Realm with New and Wondrous Creatures
