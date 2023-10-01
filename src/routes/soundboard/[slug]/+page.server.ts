@@ -32,7 +32,7 @@ export const actions: Actions = {
 		}
 		const { category, ...rest } = form.data;
 
-		await fetch(`${PUBLIC_BASE_URL}/${category}`, {
+		await event.fetch(`${PUBLIC_BASE_URL}/${category}`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
