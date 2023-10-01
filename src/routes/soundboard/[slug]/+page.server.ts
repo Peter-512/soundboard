@@ -1,8 +1,8 @@
-import type { PageServerLoad } from './$types';
-import { superValidate } from 'sveltekit-superforms/server';
-import { type Category, type SoundBoardItem, soundBoardItemSchema } from '$lib/types';
 import { PUBLIC_BASE_URL } from '$env/static/public';
-import { type Actions, error, fail } from '@sveltejs/kit';
+import { soundBoardItemSchema, type Category, type SoundBoardItem } from '$lib/types';
+import { error, fail, type Actions } from '@sveltejs/kit';
+import { superValidate } from 'sveltekit-superforms/server';
+import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params, fetch }) => {
 	const itemsRes = await fetch(`${PUBLIC_BASE_URL}/${params.slug}`);
