@@ -3,6 +3,8 @@
 	import { type SoundBoardItemSchema, soundBoardItemSchema } from '$lib/types';
 	import type { SuperValidated } from 'sveltekit-superforms';
 	import { soundBoardItems } from '$lib/stores/soundBoardItems';
+	import { isSheetOpen } from '$lib/stores/isSheetOpen';
+	import { page } from '$app/stores';
 
 	export let form: SuperValidated<SoundBoardItemSchema>;
 
@@ -10,16 +12,42 @@
 		dragons = 'Dragons',
 		werewolves = 'Werewolves'
 	}
+
+	const formValues = [
+		{
+			name: 'name',
+			label: 'Name',
+			description: 'This is the creature\'s name'
+		},
+		{
+			name: 'alt',
+			label: 'Image description',
+			description: 'Please leave an accessible description for screen readers'
+		},
+		{
+			name: 'imgSrc',
+			label: 'Image link',
+			description: 'This is the creature\'s image'
+		},
+		{
+			name: 'soundSrc',
+			label: 'Audio link',
+			description: 'This is what the creature sounds like'
+		}
+	] as const;
 </script>
 
-<Form.Root options={{ resetForm: true, onResult(input) {
-  if (input.result.type === 'failure') return;
+<Form.Root options={{ resetForm: true, async onResult(input) {
+	const form = input.result.data.form;
+	if (!form.valid) return;
+	$isSheetOpen = false;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const {category, ...soundBoardItem} = input.result.data.form.data;
-  const newId =$soundBoardItems[$soundBoardItems.length - 1].id + 1
-
-  $soundBoardItems = [...$soundBoardItems, {...soundBoardItem, id: newId}]
+  const {category, ...soundBoardItem} = form.data;
+  const newId =$soundBoardItems[$soundBoardItems.length - 1].id + 1;
+	if ($page.params.slug === category) {
+  	$soundBoardItems = [...$soundBoardItems, {...soundBoardItem, id: newId}]
+	}
   }
 }}
 					 class='flex flex-col gap-4'
@@ -42,41 +70,16 @@
 		</Form.Item>
 	</Form.Field>
 
-	<Form.Field {config} name='name'>
-		<Form.Item>
-			<Form.Label>Name</Form.Label>
-			<Form.Input />
-			<Form.Description>This is the creature's name</Form.Description>
-			<Form.Validation />
-		</Form.Item>
-	</Form.Field>
-
-	<Form.Field {config} name='alt'>
-		<Form.Item>
-			<Form.Label>Image description</Form.Label>
-			<Form.Input />
-			<Form.Description>Please leave an accessible description for screen readers</Form.Description>
-			<Form.Validation />
-		</Form.Item>
-	</Form.Field>
-
-	<Form.Field {config} name='imgSrc'>
-		<Form.Item>
-			<Form.Label>Image link</Form.Label>
-			<Form.Input />
-			<Form.Description>This is the creature's image</Form.Description>
-			<Form.Validation />
-		</Form.Item>
-	</Form.Field>
-
-	<Form.Field {config} name='soundSrc'>
-		<Form.Item>
-			<Form.Label>Audio link</Form.Label>
-			<Form.Input />
-			<Form.Description>This is what the creature sounds like</Form.Description>
-			<Form.Validation />
-		</Form.Item>
-	</Form.Field>
+	{#each formValues as { name, label, description }}
+		<Form.Field {config} name={name}>
+			<Form.Item>
+				<Form.Label>{label}</Form.Label>
+				<Form.Input />
+				<Form.Description>{description}</Form.Description>
+				<Form.Validation />
+			</Form.Item>
+		</Form.Field>
+	{/each}
 
 	<Form.Button class='mt-3'>Submit</Form.Button>
 </Form.Root>

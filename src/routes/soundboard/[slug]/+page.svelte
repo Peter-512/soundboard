@@ -8,6 +8,7 @@
 	import SoundBoardForm from './SoundBoardForm.svelte';
 	import { PlusCircled } from 'radix-icons-svelte';
 	import { soundBoardItems } from '$lib/stores/soundBoardItems';
+	import { isSheetOpen } from '$lib/stores/isSheetOpen';
 
 	export let data;
 	const { items, category, form } = data;
@@ -31,7 +32,7 @@
 	</section>
 {/if}
 
-<Sheet.Root>
+<Sheet.Root bind:open={$isSheetOpen}>
 	<Sheet.Trigger class='fixed bottom-5 right-5'>
 		<PlusCircled size={45} />
 	</Sheet.Trigger>
